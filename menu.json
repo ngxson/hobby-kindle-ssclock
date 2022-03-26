@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "name": "Screensaver Clock",
+      "items": [
+        {
+          "name": "START Screensaver Clock",
+          "action": "sh /mnt/us/extensions/ssclock/start.sh",
+          "exitmenu": false
+        },
+        {
+          "name": "STOP Screensaver Clock",
+          "action": "sh /mnt/us/extensions/ssclock/stop.sh",
+          "exitmenu": false
+        },
+        {
+          "name": "WARNING: Showing clock will drain your battery",
+          "action": "sh /mnt/us/extensions/ssclock/warn.sh",
+          "exitmenu": false
+        }
+      ]
+    }
+  ]
+}
