@@ -18,7 +18,6 @@ while true; do
 
     # print current time
     TIME_STR=$(date +"%H:%M")
-    print_clock_white_background ${SSCLOCK_X} ${SSCLOCK_Y} ${SSCLOCK_FONT_SIZE}
     print_clock_text "$TIME_STR" ${SSCLOCK_X} ${SSCLOCK_Y} ${SSCLOCK_FONT_SIZE}
 
     # go to sleep

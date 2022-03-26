@@ -76,18 +76,18 @@ if [ -f "/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf" ]; then
     FONT_MONO="/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf"
 fi
 
-print_clock_white_background() {
-    POSITION_X=${1}
-    POSITION_Y=${2}
-    FONT_SIZE=${3}
-    ${FBINK_BIN} -b -C WHITE -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format ".00:00." > /dev/null 2>&1
-}
-
 print_clock_text() {
     MESSAGE="${1}"
     POSITION_X=${2}
     POSITION_Y=${3}
     FONT_SIZE=${4}
-    # print to screen
-    ${FBINK_BIN} -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format " ${MESSAGE}" > /dev/null 2>&1
+
+    # draw background
+    ${FBINK_BIN} -b -C WHITE -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format ".${MESSAGE}." > /dev/null 2>&1
+
+    # draw text
+    ${FBINK_BIN} -b -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format " ${MESSAGE}" > /dev/null 2>&1
+
+    # update to screen
+    ${FBINK_BIN} -w -s
 }
