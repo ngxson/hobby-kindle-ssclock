@@ -2,8 +2,8 @@
 
 source ./libkohelper.sh
 
-SSCLOCK_X=100 # unit: pixel
-SSCLOCK_Y=100 # unit: pixel
+SSCLOCK_X=100 # unit: pixel, should be at least 50px
+SSCLOCK_Y=100 # unit: pixel, should be at least 50px
 SSCLOCK_FONT_SIZE=32 # unit: pt
 
 while true; do
@@ -13,7 +13,7 @@ while true; do
     # set RTC alarm
     NOW=$(date +%s)
     WAKEUP_TIME=$((((($NOW+59)/60)*60)))
-    SLEEP_SECS=$(($WAKEUP_TIME-$NOW))
+    SLEEP_SECS=$(($WAKEUP_TIME-$NOW+1))
     rtcwake -d /dev/rtc1 -m no -s $SLEEP_SECS > /dev/null 2>&1
 
     # print current time
