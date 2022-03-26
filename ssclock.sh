@@ -2,6 +2,10 @@
 
 source ./libkohelper.sh
 
+SSCLOCK_X=100 # unit: pixel
+SSCLOCK_Y=100 # unit: pixel
+SSCLOCK_FONT_SIZE=32 # unit: pt
+
 while true; do
   STATE=$(lipc-get-prop com.lab126.powerd state)
 
@@ -14,11 +18,11 @@ while true; do
 
     # print current time
     TIME_STR=$(date +"%H:%M")
-    print_clock_white_background
-    print_clock_text "$TIME_STR"
+    print_clock_white_background ${SSCLOCK_X} ${SSCLOCK_Y} ${SSCLOCK_FONT_SIZE}
+    print_clock_text "$TIME_STR" ${SSCLOCK_X} ${SSCLOCK_Y} ${SSCLOCK_FONT_SIZE}
 
     # go to sleep
-    sleep 1
+    sleep 0.5
     rtcwake -d /dev/rtc1 -m mem -s $SLEEP_SECS > /dev/null 2>&1
   else
     # wait until user pressing power button

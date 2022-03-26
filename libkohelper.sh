@@ -77,10 +77,17 @@ if [ -f "/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf" ]; then
 fi
 
 print_clock_white_background() {
-    ${FBINK_BIN} -w -C WHITE -t regular=$FONT_MONO,size=32,top=100,bottom=0,left=100,right=0,format ".00:00." > /dev/null 2>&1
+    POSITION_X=${1}
+    POSITION_Y=${2}
+    FONT_SIZE=${3}
+    ${FBINK_BIN} -b -C WHITE -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format ".00:00." > /dev/null 2>&1
 }
 
 print_clock_text() {
+    MESSAGE="${1}"
+    POSITION_X=${2}
+    POSITION_Y=${3}
+    FONT_SIZE=${4}
     # print to screen
-    ${FBINK_BIN} -t regular=$FONT_MONO,size=32,top=100,bottom=0,left=100,right=0,format " ${1}" > /dev/null 2>&1
+    ${FBINK_BIN} -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format " ${MESSAGE}" > /dev/null 2>&1
 }
