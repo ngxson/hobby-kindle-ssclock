@@ -14,6 +14,7 @@ while true; do
 
     # print current time
     TIME_STR=$(date +"%H:%M")
+    print_clock_white_background
     print_clock_text "$TIME_STR"
 
     # go to sleep

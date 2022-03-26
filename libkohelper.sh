@@ -72,11 +72,15 @@ eips_print_bottom_centered() {
 }
 
 FONT_MONO="/usr/java/lib/fonts/Caecilia_LT_65_Medium.ttf"
-if [ -f "/mnt/us/extensions/ssclock/DroidSansMono.ttf" ]; then
-    FONT_MONO="/mnt/us/extensions/ssclock/DroidSansMono.ttf"
+if [ -f "/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf" ]; then
+    FONT_MONO="/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf"
 fi
+
+print_clock_white_background() {
+    ${FBINK_BIN} -w -C WHITE -t regular=$FONT_MONO,size=32,top=100,bottom=0,left=100,right=0,format ".00:00." > /dev/null 2>&1
+}
 
 print_clock_text() {
     # print to screen
-    ${FBINK_BIN} -t regular=$FONT_MONO,size=32,top=100,bottom=0,left=100,right=0,format "${1}" > /dev/null 2>&1
+    ${FBINK_BIN} -t regular=$FONT_MONO,size=32,top=100,bottom=0,left=100,right=0,format " ${1}" > /dev/null 2>&1
 }
