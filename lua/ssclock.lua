@@ -49,18 +49,25 @@ local SCREEN_WIDTH = fbink_state.screen_width
 local SCREEN_HEIGHT = fbink_state.screen_height
 local LAST_DATE = ""
 
+-- Set margins
+local BORDER = cfg.DIALOG_BORDER
+fbink_ot.margins.right = SCREEN_WIDTH - cfg.DIALOG_POSITION_X - cfg.DIALOG_SIZE_W
+fbink_ot.margins.bottom = SCREEN_HEIGHT - cfg.DIALOG_POSITION_Y - cfg.DIALOG_SIZE_H
+fbink_ot.padding = 3 -- full padding
+print()
+
 function displayClock(battery_percent)
 	local display_time = os.date(cfg.CLOCK_TIME_FORMAT)
-	local display_date = os.date(cfg.CLOCK_DATE_FORMAT) .. " | " .. battery_percent .. "%%"
+	local display_date = os.date(cfg.CLOCK_DATE_FORMAT) .. "  | " .. battery_percent .. "%%"
 	-- draw time
-	fbink_ot.margins.left = cfg.POSITION_X
-	fbink_ot.margins.top = cfg.POSITION_Y
+	fbink_ot.margins.left = cfg.TIME_X
+	fbink_ot.margins.top = cfg.TIME_Y
 	fbink_ot.size_px = cfg.TIME_FONT_SIZE_PX
 	FBInk.fbink_printf(fbfd, fbink_ot, fbink_cfg, display_time)
 	-- draw date
 	if LAST_DATE ~= display_date then
-		fbink_ot.margins.left = cfg.POSITION_X
-		fbink_ot.margins.top = cfg.POSITION_Y + cfg.TIME_FONT_SIZE_PX
+		fbink_ot.margins.left = cfg.DATE_X
+		fbink_ot.margins.top = cfg.DATE_Y
 		fbink_ot.size_px = cfg.DATE_FONT_SIZE_PX
 		FBInk.fbink_printf(fbfd, fbink_ot, fbink_cfg, display_date)
 	end
@@ -69,14 +76,39 @@ function displayClock(battery_percent)
 	fbink_cfg.no_refresh = false
 	FBInk.fbink_refresh(
 		fbfd,
-		cfg.POSITION_X,
-		cfg.POSITION_Y,
-		300,
-		300,
+		cfg.DIALOG_POSITION_X - BORDER,
+		cfg.DIALOG_POSITION_Y - BORDER,
+		cfg.DIALOG_SIZE_W + 2*BORDER,
+		cfg.DIALOG_SIZE_H + 2*BORDER,
 		fbink_cfg
 	)
 	fbink_cfg.no_refresh = true
 end
+
+function drawDialogBackground()
+	local inner_top = cfg.DIALOG_POSITION_Y
+	local inner_right = fbink_ot.margins.right
+	local inner_left = cfg.DIALOG_POSITION_X
+	local inner_bottom = fbink_ot.margins.bottom
+	fbink_ot.size_px = cfg.TIME_FONT_SIZE_PX
+	-- draw outer
+	fbink_cfg.is_inverted = true
+	fbink_ot.margins.top = inner_top - BORDER
+	fbink_ot.margins.right = inner_right - BORDER
+	fbink_ot.margins.left = inner_left - BORDER
+	fbink_ot.margins.bottom = inner_bottom - BORDER
+	FBInk.fbink_printf(fbfd, fbink_ot, fbink_cfg, " ")
+	-- draw inner
+	fbink_cfg.is_inverted = false
+	fbink_ot.margins.top = inner_top
+	fbink_ot.margins.right = inner_right
+	fbink_ot.margins.left = inner_left
+	fbink_ot.margins.bottom = inner_bottom
+	FBInk.fbink_printf(fbfd, fbink_ot, fbink_cfg, " ")
+end
+
+-- for testing
+-- drawDialogBackground()
 -- displayClock(getBatteryLevel())
 -- os.exit(0)
 
@@ -105,6 +137,7 @@ while true do
 		LAST_DATE = ""
 		os.executeCaptured("lipc-wait-event com.lab126.powerd goingToScreenSaver,readyToSuspend")
 		os.execute("sleep 1")
+		drawDialogBackground()
 	end
 	os.execute("sleep 0.5")
 end

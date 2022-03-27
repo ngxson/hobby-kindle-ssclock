@@ -1,14 +1,30 @@
-local ssclockConfig = {
+local cfg = {
   CLOCK_TIME_FORMAT = "%H:%M", -- see below
   CLOCK_DATE_FORMAT = "%a, %d/%m", -- see below
-  POSITION_X = 100, -- unit: pixel
-  POSITION_Y = 100, -- unit: pixel
+  DIALOG_BORDER = 5, -- unit: pixel
+  DIALOG_POSITION_X = 100, -- unit: pixel
+  DIALOG_POSITION_Y = 100, -- unit: pixel
+  DIALOG_SIZE_W = 360, -- unit: pixel
+  DIALOG_PADDING = 40, -- unit: pixel
   TIME_FONT_SIZE_PX = 150, -- unit: pixel
   DATE_FONT_SIZE_PX = 50, -- unit: pixel
-  DATE_LEFT_PADDING = 40, -- unit: pixel
   FONT_FILE = "/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf", -- ttf file
   DISABLE_BATT_LOWER_THAN = 10, -- disable when battery is lower than X percent
+
+
+  -- computed values; don't change
+  TIME_X = -1,
+  TIME_Y = -1,
+  DATE_X = -1,
+  DATE_Y = -1,
+  DIALOG_SIZE_H = -1,
 }
+
+cfg.TIME_X = cfg.DIALOG_POSITION_X + cfg.DIALOG_PADDING
+cfg.TIME_Y = cfg.DIALOG_POSITION_Y + math.floor(cfg.DIALOG_PADDING * 0.8)
+cfg.DATE_X = cfg.TIME_X
+cfg.DATE_Y = cfg.TIME_Y + cfg.TIME_FONT_SIZE_PX
+cfg.DIALOG_SIZE_H = (2 * cfg.DIALOG_PADDING) + cfg.TIME_FONT_SIZE_PX + cfg.DATE_FONT_SIZE_PX
 
 --[[
   TIME FORMAT:
@@ -33,4 +49,4 @@ local ssclockConfig = {
   %%	the character `%´
 --]]
 
-return ssclockConfig
+return cfg
