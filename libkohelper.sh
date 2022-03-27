@@ -1,7 +1,5 @@
 #!/bin/sh
 
-source ./libkindle.sh
-
 ## A bit of helper functions...
 # Check which type of init system we're running on
 if [ -d /etc/upstart ]; then
@@ -71,27 +69,4 @@ eips_print_bottom_centered() {
         # Crappy fallback
         eips 0 0 "${kh_eips_string}" >/dev/null
     fi
-}
-
-FONT_MONO="/usr/java/lib/fonts/Caecilia_LT_65_Medium.ttf"
-if [ -f "/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf" ]; then
-    FONT_MONO="/mnt/us/extensions/ssclock/IBMPlexSansArabic.ttf"
-fi
-
-print_clock_text() {
-    MESSAGE="${1}"
-    POSITION_X=${2}
-    POSITION_Y=${3}
-    FONT_SIZE=${4}
-
-    # draw background
-    ${FBINK_BIN} -b -C WHITE -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format ".${MESSAGE}." > /dev/null 2>&1
-
-    # draw text
-    ${FBINK_BIN} -b -t regular=${FONT_MONO},size=${FONT_SIZE},top=${POSITION_Y},bottom=0,left=${POSITION_X},right=0,format " ${MESSAGE}" > /dev/null 2>&1
-
-    # update to screen
-    RECT_SIZE_W=$((${SCREEN_X_RES} - ${POSITION_X} - 50))
-    RECT_SIZE_H=$((${SCREEN_Y_RES} - ${POSITION_Y} - 50))
-    ${FBINK_BIN} -w -s top=${POSITION_Y},left=${POSITION_X},width=${RECT_SIZE_W},height=${RECT_SIZE_H} > /dev/null 2>&1
 }
