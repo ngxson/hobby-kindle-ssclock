@@ -51,8 +51,8 @@ local LAST_DATE = ""
 
 -- Set margins
 local BORDER = cfg.DIALOG_BORDER
-fbink_ot.margins.right = SCREEN_WIDTH - cfg.DIALOG_POSITION_X - cfg.DIALOG_SIZE_W
-fbink_ot.margins.bottom = SCREEN_HEIGHT - cfg.DIALOG_POSITION_Y - cfg.DIALOG_SIZE_H
+local DIALOG_PADDING_RIGHT = SCREEN_WIDTH - cfg.DIALOG_POSITION_X - cfg.DIALOG_SIZE_W
+local DIALOG_PADDING_BOTTOM = SCREEN_HEIGHT - cfg.DIALOG_POSITION_Y - cfg.DIALOG_SIZE_H
 fbink_ot.padding = 3 -- full padding
 print()
 
@@ -62,12 +62,14 @@ function displayClock(battery_percent)
 	-- draw time
 	fbink_ot.margins.left = cfg.TIME_X
 	fbink_ot.margins.top = cfg.TIME_Y
+	fbink_ot.margins.bottom = SCREEN_HEIGHT - (cfg.TIME_Y + cfg.TIME_FONT_SIZE_PX)
 	fbink_ot.size_px = cfg.TIME_FONT_SIZE_PX
 	FBInk.fbink_printf(fbfd, fbink_ot, fbink_cfg, display_time)
 	-- draw date
 	if LAST_DATE ~= display_date then
 		fbink_ot.margins.left = cfg.DATE_X
 		fbink_ot.margins.top = cfg.DATE_Y
+		fbink_ot.margins.bottom = SCREEN_HEIGHT - (cfg.DATE_Y + cfg.DATE_FONT_SIZE_PX)
 		fbink_ot.size_px = cfg.DATE_FONT_SIZE_PX
 		FBInk.fbink_printf(fbfd, fbink_ot, fbink_cfg, display_date)
 	end
@@ -87,9 +89,9 @@ end
 
 function drawDialogBackground()
 	local inner_top = cfg.DIALOG_POSITION_Y
-	local inner_right = fbink_ot.margins.right
+	local inner_right = DIALOG_PADDING_RIGHT
 	local inner_left = cfg.DIALOG_POSITION_X
-	local inner_bottom = fbink_ot.margins.bottom
+	local inner_bottom = DIALOG_PADDING_BOTTOM
 	fbink_ot.size_px = cfg.TIME_FONT_SIZE_PX
 	-- draw outer
 	fbink_cfg.is_inverted = true
@@ -131,13 +133,13 @@ while true do
 		-- put back to sleep mode
 		os.execute("sleep 0.5")
 		os.executeCaptured("rtcwake -d /dev/rtc1 -m mem -s " .. wait_seconds)
+		os.execute("sleep 0.2")
 	else
 		-- screensaver is NOT showing
 		-- we wait for user to enter screensaver mode
 		LAST_DATE = ""
 		os.executeCaptured("lipc-wait-event com.lab126.powerd goingToScreenSaver,readyToSuspend")
-		os.execute("sleep 1")
+		os.execute("sleep 1.5")
 		drawDialogBackground()
 	end
-	os.execute("sleep 0.5")
 end
